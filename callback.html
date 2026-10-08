@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; img-src data:; style-src 'sha256-pKkFL9yvxKIV9g3BUo6KmPROO/f0hgFKWnDDYHp9q/w='; script-src 'sha256-FtV5vK5XmxgU9QravB4aOkiqgbRTbw52oSvJ1JkQXD8='">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>KZN Økonomi · Tilbage til Terminal</title>
+<link rel="icon" href="data:,">
+<style>
+/* KZN august 2026 (kzn.css-tokens, som 50-oversigtsside §6). Kun lyst tema. Systemskrift: intet hentes udefra. */
+:root {
+  color-scheme: light;
+  --paper: #F6F3EE; --mint: #DCE7DF; --white-field: #FBFAF7; --sand: #F1EBE4; --forest: #16302A;
+  --ink: #16302A; --ink-soft: rgba(22,48,42,.72); --ink-faint: rgba(22,48,42,.7); --rule: rgba(22,48,42,.1);
+  --accent: #DE6A4E; --accent-light: #E8917A; --accent-strong: #B0462D; --accent-ink: #9C3B24; --ok: #2F7A55;
+  --font-body: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace;
+  --type-mono: .6875rem; --type-small: .8125rem; --type-body: clamp(.9375rem, .9rem + .2vw, 1rem);
+  --type-lead: clamp(1rem, .95rem + .3vw, 1.0625rem); --type-brand: clamp(1.1875rem, 1.1rem + .4vw, 1.3125rem);
+  --type-sub: clamp(1.1875rem, 1.05rem + .6vw, 1.375rem); --type-hero: clamp(1.875rem, 1.4rem + 2.2vw, 2.75rem);
+  --radius-sm: 3px; --radius-md: 4px; --radius-lg: 8px; --shell: min(720px, calc(100vw - 32px));
+  --ease: cubic-bezier(.22,.61,.36,1); --dur-fast: 140ms;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: var(--type-body);
+  line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-wrap: break-word; }
+a { color: inherit; text-underline-offset: .18em; }
+a:hover { color: var(--accent-ink); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: var(--radius-sm); }
+.shell { width: var(--shell); margin: 0 auto; position: relative; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 10; background: var(--forest); color: var(--paper);
+  padding: 12px 16px; border-radius: var(--radius-md); font-weight: 500; text-decoration: none; }
+.skip:focus { top: 12px; color: var(--paper); }
+
+/* Header og lockup */
+.site-header { border-bottom: 1px solid var(--rule); background: var(--paper); }
+.site-header .shell { display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; min-height: 64px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: var(--type-brand); font-weight: 600; letter-spacing: -.02em;
+  text-decoration: none; min-height: 44px; }
+.brand:hover { color: var(--ink); }
+.brand-square { width: 15px; height: 15px; background: var(--accent); border-radius: 2px; flex: none; }
+.brand-dot { color: var(--accent); }
+.brand-tag { font-family: var(--font-mono); font-size: var(--type-mono); font-weight: 500; letter-spacing: .1em; color: var(--ink-soft);
+  border: 1px solid rgba(22,48,42,.18); border-radius: var(--radius-sm); padding: 2px 7px 1px; margin-left: 3px; }
+.nav { display: flex; gap: 4px 18px; font-size: var(--type-small); }
+.nav a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink-soft); }
+.nav a[aria-current] { color: var(--ink); font-weight: 500; }
+
+/* Hero på mint med KZN-gitteret */
+.hero { position: relative; background: var(--mint); border-bottom: 1px solid var(--rule);
+  padding: clamp(36px, 6vw, 64px) 0 clamp(32px, 5vw, 48px); }
+.hero::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 56px 56px; }
+.eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 18px; font-family: var(--font-mono); font-size: var(--type-mono);
+  letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+.eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+h1 { margin: 0; font-size: var(--type-hero); font-weight: 600; letter-spacing: -.035em; line-height: 1.05; }
+.lead { margin: 16px 0 0; font-size: var(--type-lead); font-weight: 500; letter-spacing: -.01em; max-width: 58ch; }
+.meta { margin: 12px 0 0; font-size: var(--type-small); color: var(--ink-soft); }
+
+/* Brødtekst */
+main { display: block; padding: clamp(28px, 5vw, 48px) 0 clamp(40px, 6vw, 64px); }
+h2 { margin: 2.25rem 0 .5rem; font-size: var(--type-sub); font-weight: 600; letter-spacing: -.02em; line-height: 1.25; }
+.shell > h2:first-child, .panel h2 { margin-top: 0; }
+p, ul, ol { margin: 0 0 .9rem; }
+ul, ol { padding-left: 1.3rem; }
+li + li { margin-top: .4rem; }
+strong { font-weight: 600; }
+code { font-family: var(--font-mono); font-size: .875em; background: var(--sand); border: 1px solid rgba(22,48,42,.08);
+  border-radius: var(--radius-sm); padding: .05em .35em; overflow-wrap: anywhere; }
+.muted { color: var(--ink-soft); }
+.small { font-size: var(--type-small); }
+.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 20px; margin: 0 0 1rem; }
+.facts dt { font-family: var(--font-mono); font-size: var(--type-mono); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-faint); padding-top: .3em; }
+.facts dd { margin: 0; }
+.en { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+
+/* Panel (KZN SYSTEM/STATUS-modulet) og kodeblok */
+.panel { background: #fff; border: 1px solid rgba(22,48,42,.12); border-radius: var(--radius-lg);
+  box-shadow: 0 18px 44px -28px rgba(22,48,42,.35); overflow: hidden; margin: 0 0 1.5rem; }
+.band { display: flex; align-items: center; gap: 10px; margin: 0; padding: 12px 18px; background: var(--white-field);
+  border-bottom: 1px solid var(--rule); font-family: var(--font-mono); font-size: var(--type-mono); letter-spacing: .09em;
+  text-transform: uppercase; color: var(--ink-faint); }
+.band::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
+.panel-body { padding: 18px; }
+.panel-body > :last-child { margin-bottom: 0; }
+.codebox { background: var(--forest); color: var(--paper); border-radius: var(--radius-md); padding: 12px 14px 14px; margin: 0 0 12px; }
+.codebox-label { display: block; margin: 0 0 6px; font-family: var(--font-mono); font-size: var(--type-mono); letter-spacing: .08em;
+  text-transform: uppercase; color: var(--accent-light); }
+.codebox code { display: block; background: transparent; border: 0; padding: 0; color: var(--paper); font-size: .8125rem;
+  line-height: 1.45; word-break: break-all; user-select: all; -webkit-user-select: all; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 1rem; }
+.btn { font: 500 var(--type-small)/1.2 var(--font-body); color: var(--ink); background: var(--white-field);
+  border: 1px solid rgba(22,48,42,.2); border-radius: var(--radius-md); min-height: 44px; min-width: 44px; padding: 0 16px;
+  cursor: pointer; display: inline-flex; align-items: center; text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease); }
+.btn:hover { border-color: var(--ink); background: var(--paper); color: var(--ink); }
+.btn[data-done] { border-color: var(--ok); color: var(--ok); }
+.status { margin: 18px 0 0; font-size: var(--type-lead); font-weight: 500; }
+.notice { border-left: 3px solid var(--accent-strong); padding: 2px 0 2px 14px; margin: 0 0 1.25rem; }
+.notice strong { color: var(--accent-ink); }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Footer */
+.site-footer { border-top: 1px solid var(--rule); padding: 28px 0 44px; font-size: var(--type-small); color: var(--ink-soft); }
+.site-footer p { margin: 0 0 8px; max-width: 64ch; }
+.foot-meta { font-family: var(--font-mono); font-size: var(--type-mono); letter-spacing: .04em; color: var(--ink-faint); }
+
+@media (max-width: 520px) {
+  .facts { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .facts dd { margin-bottom: 10px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } }
+@media (forced-colors: active) { .panel, .codebox, .btn, .brand-tag { border: 1px solid CanvasText; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#indhold">Gå til indholdet</a>
+<header class="site-header">
+  <div class="shell">
+    <a class="brand" href="./" aria-label="KZN Økonomi, forsiden"><span class="brand-square" aria-hidden="true"></span><span>KZN<span class="brand-dot">.</span></span><span class="brand-tag">ØKONOMI</span></a>
+    <nav class="nav" aria-label="Sider">
+      <a href="privacy.html">Privatliv</a>
+      <a href="terms.html">Vilkår</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" aria-labelledby="titel">
+  <div class="shell">
+    <p class="eyebrow">Login via Enable Banking</p>
+    <h1 id="titel">Tilbage til Terminal</h1>
+    <p class="lead">Godkendelsen hos banken er slut. Koden skal nu videre til <code>kzn-shop login</code>, som venter i Terminal på din Mac.</p>
+    <p class="status" id="status" role="status">Du er tilbage fra banken.</p>
+  </div>
+</section>
+
+<main id="indhold">
+  <div class="shell">
+
+    <noscript>
+      <div class="panel">
+        <p class="band">Uden JavaScript</p>
+        <div class="panel-body">
+          <h2>Indsæt koden i Terminal</h2>
+          <p>Koden står i adresselinjen øverst i Safari. Uden JavaScript kan siden hverken vise den her eller sende den videre, så brug hele adressen:</p>
+          <ol>
+            <li>Tryk <strong>⌘L</strong> og derefter <strong>⌘C</strong> for at kopiere hele adressen.</li>
+            <li>Gå til Terminal, hvor <code>kzn-shop login</code> venter.</li>
+            <li>Indsæt med <strong>⌘V</strong>, og tryk Enter. Teksten vises ikke, mens du indsætter.</li>
+          </ol>
+          <p class="muted small">kzn-shop finder selv koden i adressen og tjekker, at den hører til netop dette login.</p>
+        </div>
+      </div>
+    </noscript>
+
+    <div class="notice" id="mangler" hidden>
+      <p><strong>Adressen har ingen gyldig kode.</strong> Siden virker kun lige efter en godkendelse hos banken. Start forfra i Terminal med <code>kzn-shop login</code>.</p>
+    </div>
+
+    <div class="notice" id="afbrudt" hidden>
+      <p><strong>Godkendelsen blev afbrudt</strong> hos banken eller Enable Banking (fejl: <code id="fejlkode"></code>). Intet er gemt. Start forfra i Terminal med <code>kzn-shop login</code>.</p>
+    </div>
+
+    <section class="panel" id="svar" aria-labelledby="svar-titel" hidden>
+      <p class="band">Koden til Terminal</p>
+      <div class="panel-body">
+        <h2 id="svar-titel">Indsæt koden i Terminal</h2>
+        <p>Kommer koden ikke frem af sig selv, så kopiér linjen herunder, og indsæt den i Terminal:</p>
+        <div class="codebox">
+          <span class="codebox-label">Kode og login-nøgle (state)</span>
+          <code id="kode"></code>
+        </div>
+        <div class="actions">
+          <button class="btn" type="button" id="kopier" aria-label="Kopiér koden til Terminal" hidden>Kopiér</button>
+          <a class="btn" id="igen" href="#svar" hidden>Send til Terminal igen</a>
+          <span class="vh" id="kopieret" aria-live="polite"></span>
+        </div>
+        <ol>
+          <li>Gå til Terminal, hvor <code>kzn-shop login</code> venter.</li>
+          <li>Indsæt med <strong>⌘V</strong>, og tryk Enter. Teksten vises ikke, mens du indsætter.</li>
+          <li>Når Terminal skriver, at forbindelsen er oprettet, kan du lukke fanen.</li>
+        </ol>
+        <p class="muted small">Linjen er koden fra banken plus login-nøglen (state), så kzn-shop kan se, at den hører til netop dette login. Hele adressen fra adresselinjen virker også.</p>
+      </div>
+    </section>
+
+    <h2>Hvad sker der med koden?</h2>
+    <ul>
+      <li>Siden sender den kun videre til <code>127.0.0.1</code>, altså kzn-shop på din egen Mac. Aldrig andre steder hen.</li>
+      <li>Koden kan kun bruges én gang og er værdiløs uden den private nøgle, som kun ligger på din Mac.</li>
+      <li>Siden er statisk: ingen cookies, ingen analytics, intet hentes udefra, og intet gemmes.</li>
+    </ul>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="shell">
+    <p>KZN Økonomi er en privatpersons eget værktøj til at læse egne konti. Det kan ikke betale eller overføre. Ikke lavet af eller tilknyttet banken, Enable Banking eller Anthropic.</p>
+    <p><a href="privacy.html">Privatlivspolitik</a> · <a href="terms.html">Vilkår</a></p>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  // Kun til 127.0.0.1 på ejerens egen Mac. Porten står i state som k1p<5 cifre>_<nonce>; ellers standardporten.
+  var DEFAULT_PORT = 47613;
+  var STATE_RE = /^[A-Za-z0-9_-]{32,128}$/;
+  var STATE_PORT_RE = /^k1p([0-9]{5})_[A-Za-z0-9_-]{16,}$/;
+  var CODE_RE = /^[A-Za-z0-9._~+\/=:%-]{1,1024}$/;
+  var ERROR_RE = /^[A-Za-z0-9_.-]{1,60}$/;
+
+  function el(id) { return document.getElementById(id); }
+  function say(text) { el("status").textContent = text; }
+
+  // ?state=..&code=.. (eller &error=..) -> rå værdier, eller null. Andre nøgler ignoreres; dubletter afvises.
+  function parse(search) {
+    if (typeof search !== "string" || search.length < 2 || search.length > 4096 || search.charAt(0) !== "?") {
+      return null;
+    }
+    var seen = {};
+    var parts = search.slice(1).split("&");
+    for (var i = 0; i < parts.length; i++) {
+      var eq = parts[i].indexOf("=");
+      var key = eq < 0 ? parts[i] : parts[i].slice(0, eq);
+      if (key !== "state" && key !== "code" && key !== "error") { continue; }
+      if (eq < 0 || seen.hasOwnProperty(key)) { return null; }
+      seen[key] = parts[i].slice(eq + 1);
+    }
+    if (!seen.hasOwnProperty("state") || !STATE_RE.test(seen.state)) { return null; }
+    if (seen.hasOwnProperty("error")) {
+      return ERROR_RE.test(seen.error) ? { state: seen.state, error: seen.error } : null;
+    }
+    if (seen.hasOwnProperty("code") && CODE_RE.test(seen.code)) {
+      return { state: seen.state, code: seen.code };
+    }
+    return null;
+  }
+
+  function portOf(state) {
+    var m = STATE_PORT_RE.exec(state);
+    if (!m) { return DEFAULT_PORT; }
+    var port = parseInt(m[1], 10);
+    return port >= 1024 && port <= 65535 ? port : 0;
+  }
+
+  function cameBack() {
+    try {
+      var nav = performance.getEntriesByType("navigation")[0];
+      if (nav && nav.type) { return nav.type === "back_forward"; }
+    } catch (e) { /* ældre browser */ }
+    try { return performance.navigation.type === 2; } catch (e2) { return false; }
+  }
+
+  function setupCopy() {
+    var btn = el("kopier");
+    var live = el("kopieret");
+    var code = el("kode");
+    var label = btn.textContent;
+    var timer = 0;
+    function show(text, ok) {
+      btn.textContent = text;
+      if (ok) { btn.setAttribute("data-done", ""); live.textContent = "Kopieret til udklipsholderen"; }
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        btn.textContent = label;
+        btn.removeAttribute("data-done");
+        live.textContent = "";
+      }, ok ? 1800 : 6000);
+    }
+    function fallback() {
+      var ok = false;
+      try {
+        var range = document.createRange();
+        range.selectNodeContents(code);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ok = document.execCommand("copy");
+      } catch (e) { ok = false; }
+      show(ok ? "Kopieret" : "Markeret: tryk ⌘C", ok);
+    }
+    btn.addEventListener("click", function () {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(code.textContent).then(function () { show("Kopieret", true); }, fallback);
+      } else {
+        fallback();
+      }
+    });
+    btn.hidden = false;
+  }
+
+  var res = parse(window.location.search);
+  if (!res) {
+    el("mangler").hidden = false;
+    say("Adressen har ingen gyldig kode.");
+    return;
+  }
+  var line = "state=" + res.state + (res.error ? "&error=" + res.error : "&code=" + res.code);
+  el("kode").textContent = line;
+  el("svar").hidden = false;
+  if (res.error) {
+    el("fejlkode").textContent = res.error;
+    el("afbrudt").hidden = false;
+  }
+  setupCopy();
+
+  var port = portOf(res.state);
+  if (!port) {
+    say("Siden kan ikke sende koden selv. Indsæt den i Terminal.");
+    return;
+  }
+  var target = "http://127.0.0.1:" + port + "/callback?" + line;
+  var again = el("igen");
+  again.href = target;
+  again.hidden = false;
+
+  var back = res.error
+    ? "Kom Terminal ikke med? Indsæt linjen herunder i Terminal, eller send igen."
+    : "Nåede koden ikke frem til Terminal? Indsæt den herunder, eller send igen.";
+  if (cameBack()) {
+    say(back);
+    return;
+  }
+  window.addEventListener("pageshow", function (e) { if (e.persisted) { say(back); } });
+  say(res.error ? "Sender beskeden videre til kzn-shop på din Mac …" : "Sender koden videre til kzn-shop på din Mac …");
+  window.location.assign(target);
+})();
+</script>
+</body>
+</html>
